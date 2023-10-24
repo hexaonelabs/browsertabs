@@ -26,7 +26,7 @@ import {
 const getDatasFromChromeStorageAPI = async () => {
   // get db
   const {
-    browsertabs: { data = [] },
+    browsertabs: { data } = { data: [] },
   } = await (chrome.storage.sync.get('browsertabs') as Promise<{
     browsertabs: {
       data: {
@@ -129,7 +129,6 @@ function App() {
                 const pathname = `${tab.url}`
                 const faviconUrl = tab.favIconUrl
                 return (
-                  <>
                     <IonItem
                       key={index}
                       onClick={async () => {
@@ -147,7 +146,6 @@ function App() {
                         <p className="pathname">{pathname}</p>
                       </IonLabel>
                     </IonItem>
-                  </>
                 )
               })}
             </IonList>
@@ -213,9 +211,8 @@ function App() {
               {groups.map((group, index) => {
                 const title = `${group.title || group.id}`
                 return (
-                  <IonItemSliding id={'ion-item-slide-' + index}>
+                  <IonItemSliding id={'ion-item-slide-' + index} key={index}>
                     <IonItem
-                      key={index}
                       onClick={async () => {
                         const { tabs } = group
                         // create all tabs from `group.tabs`
@@ -227,9 +224,9 @@ function App() {
                             index,
                           })
                         }
-                        // close current active tab
-                        const currentActiveTab = await chrome.tabs.query({ active: true })
-                        await chrome.tabs.remove(currentActiveTab.map(({ id }) => id || 0))
+                        // // close current active tab
+                        // const currentActiveTab = await chrome.tabs.query({ active: true })
+                        // await chrome.tabs.remove(currentActiveTab.map(({ id }) => id || 0))
                       }}
                     >
                       <IonLabel>
